@@ -45,19 +45,20 @@ runs:
     - run: "echo ::error::wrong OS, please select runs-on: ubuntu-latest && exit 1"
       if: runner.os != 'linux'
       shell: bash
-      
+
     - run: |
         sudo snap install snapcraft --classic
         sudo dpkg --add-architecture arm64
         echo "deb [arch=arm64] http://ports.ubuntu.com/ focal main restricted universe" | sudo tee -a /etc/apt/sources.list.d/multiarch-libs.list
         echo "deb [arch=arm64] http://ports.ubuntu.com/ focal-updates main restricted universe" | sudo tee -a /etc/apt/sources.list.d/multiarch-libs.list
-        sudo sed -i 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list 
+        sudo sed -i 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
       shell: bash
-    
+
     - id: build-snap
       run: |
         cd ${{ inputs.path-app-files }}
-        snapcraft clean --destructive-mode
-        snapcraft --destructive-mode --target-arch=${{ inputs.architecture }} --enable-experimental-target-arch
+        echo ${{ inputs.path-app-files }}
+        sudo snapcraft clean --destructive-mode
+        sudo snapcraft --destructive-mode --target-arch=${{ inputs.architecture }} --enable-experimental-target-arch
         echo "path-snap=$(realpath $(find -name '*${{ inputs.architecture }}.snap'))" >> $GITHUB_OUTPUT
       shell: bash
