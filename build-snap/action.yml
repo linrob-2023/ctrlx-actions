@@ -60,7 +60,7 @@ runs:
         # Adjust the existing sources list for amd64 to be explicit
         sudo sed -i 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
         echo "Running apt-get update after adding architecture..."
-        sudo apt-get update  # Ensure that apt update succeeds after adding new architecture
+        echo "sudo apt-get update"  # Ensure that apt update succeeds after adding new architecture
       shell: bash
 
     - id: build-snap
@@ -85,5 +85,5 @@ runs:
       if: failure()  # This ensures it runs only if the previous step fails
       run: |
         echo "Printing Snapcraft logs..."
-        cat /root/.local/state/snapcraft/log/snapcraft-*.log || echo "No log file found"
+        sudo cat /root/.local/state/snapcraft/log/snapcraft-*.log || echo "No log file found"
       shell: bash
