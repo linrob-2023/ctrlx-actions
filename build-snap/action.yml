@@ -67,7 +67,7 @@ runs:
       run: |
         cd ${{ inputs.path-app-files }}
         echo "Building snap in path: ${{ inputs.path-app-files }}"
-        lxd init --auto
+        sudo lxd init --auto
         # Clean previous builds
         sudo snapcraft clean # --destructive-mode
         # Build the snap for the specified architecture
