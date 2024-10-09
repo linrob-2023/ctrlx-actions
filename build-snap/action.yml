@@ -47,22 +47,43 @@ runs:
       shell: bash
 
     - run: |
-        echo "Updating"
+        echo "Updating package list..."
         sudo apt-get update
-        echo "Installing packages"
-        sudo pip install ctrlx-datalayer
-        sudo snap install snapcraft --classic
-        sudo dpkg --add-architecture arm64
+         echo "Installing dependencies and setting up multiarch..."
+        sudo apt-get install -y python3-pip  # Ensure pip is available
+        sudo pip install ctrlx-datalayer  # Install ctrlx-datalayer using pip
+        sudo snap install snapcraft --classic  # Install Snapcraft
+        sudo dpkg --add-architecture arm64  # Enable arm64 architecture
+        # Add necessary APT repositories for arm64
         echo "deb [arch=arm64] http://ports.ubuntu.com/ focal main restricted universe" | sudo tee -a /etc/apt/sources.list.d/multiarch-libs.list
         echo "deb [arch=arm64] http://ports.ubuntu.com/ focal-updates main restricted universe" | sudo tee -a /etc/apt/sources.list.d/multiarch-libs.list
+        # Adjust the existing sources list for amd64 to be explicit
         sudo sed -i 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
+        echo "Running apt-get update after adding architecture..."
+        sudo apt-get update  # Ensure that apt update succeeds after adding new architecture
       shell: bash
 
     - id: build-snap
       run: |
         cd ${{ inputs.path-app-files }}
-        echo ${{ inputs.path-app-files }}
+        echo "Building snap in path: ${{ inputs.path-app-files }}"
+        # Clean previous builds
         sudo snapcraft clean --destructive-mode
+        # Build the snap for the specified architecture
         sudo snapcraft --destructive-mode --target-arch=${{ inputs.architecture }} --enable-experimental-target-arch
-        echo "path-snap=$(realpath $(find -name '*${{ inputs.architecture }}.snap'))" >> $GITHUB_OUTPUT
+        # Find and output the built snap's path
+        SNAP_PATH=$(find . -name "*${{ inputs.architecture }}.snap")
+        echo "path-snap=$(realpath $SNAP_PATH)" >> $GITHUB_OUTPUT
+      shell: bash
+        # cd ${{ inputs.path-app-files }}
+        # echo ${{ inputs.path-app-files }}
+        # sudo snapcraft clean --destructive-mode
+      # sudo snapcraft --destructive-mode --target-arch=${{ inputs.architecture }} --enable-experimental-target-arch
+      # echo "path-snap=$(realpath $(find -name '*${{ inputs.architecture }}.snap'))" >> $GITHUB_OUTPUT
+        # Print Snapcraft logs if the build fails
+    - name: Print Snapcraft Logs on Failure
+      if: failure()  # This ensures it runs only if the previous step fails
+      run: |
+        echo "Printing Snapcraft logs..."
+        cat /root/.local/state/snapcraft/log/snapcraft-*.log || echo "No log file found"
       shell: bash
