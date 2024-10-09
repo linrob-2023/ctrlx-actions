@@ -67,11 +67,13 @@ runs:
       run: |
         cd ${{ inputs.path-app-files }}
         echo "Building snap in path: ${{ inputs.path-app-files }}"
-        sudo lxd init --auto
+
         # Clean previous builds
         sudo snapcraft clean # --destructive-mode
+
+        sudo lxd init --auto
         # Build the snap for the specified architecture
-        sudo snapcraft --build-for=${{ inputs.architecture }} --verbosity=verbose
+        sudo snapcraft --build-for=${{ inputs.architecture }} --verbosity=verbose --destructive-mode --enable-experimental-extensions
         # snapcraft --destructive-mode --target-arch=${{ inputs.architecture }} --enable-experimental-target-arch
         # Find and output the built snap's path
         SNAP_PATH=$(find . -name "*${{ inputs.architecture }}.snap")
