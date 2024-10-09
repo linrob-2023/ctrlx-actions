@@ -68,9 +68,10 @@ runs:
         cd ${{ inputs.path-app-files }}
         echo "Building snap in path: ${{ inputs.path-app-files }}"
         # Clean previous builds
-        sudo snapcraft clean --destructive-mode
+        sudo snapcraft clean # --destructive-mode
         # Build the snap for the specified architecture
-        sudo snapcraft --destructive-mode --target-arch=${{ inputs.architecture }} --enable-experimental-target-arch
+        sudo snapcraft --build-for=${{ inputs.architecture }} --verbosity=verbose
+        # snapcraft --destructive-mode --target-arch=${{ inputs.architecture }} --enable-experimental-target-arch
         # Find and output the built snap's path
         SNAP_PATH=$(find . -name "*${{ inputs.architecture }}.snap")
         echo "path-snap=$(realpath $SNAP_PATH)" >> $GITHUB_OUTPUT
