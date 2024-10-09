@@ -47,6 +47,9 @@ runs:
       shell: bash
 
     - run: |
+        echo "Updating"
+        sudo apt-get update
+        echo "Installing packages"
         sudo pip install ctrlx-datalayer
         sudo snap install snapcraft --classic
         sudo dpkg --add-architecture arm64
