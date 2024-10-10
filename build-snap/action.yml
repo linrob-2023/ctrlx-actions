@@ -73,7 +73,7 @@ runs:
 
         SNAP_PATH=$(find . -name "*${{ inputs.architecture }}.snap" | head -n 1)
 
-        echo "file-path=$SNAP_PATH" >> $GITHUB_OUTPUT   # Set the file path as output
+        # echo "file-path=$SNAP_PATH" >> $GITHUB_OUTPUT   # Set the file path as output
 
         # Check if the snap file exists and is valid
         if [[ -f "$SNAP_PATH" ]]; then
