@@ -51,7 +51,14 @@ runs:
         sudo dpkg --add-architecture arm64
         echo "deb [arch=arm64] http://ports.ubuntu.com/ focal main restricted universe" | sudo tee -a /etc/apt/sources.list.d/multiarch-libs.list
         echo "deb [arch=arm64] http://ports.ubuntu.com/ focal-updates main restricted universe" | sudo tee -a /etc/apt/sources.list.d/multiarch-libs.list
-        sudo sed -i 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
+
+        if [[ "${{ inputs.architecture }}" == "amd64"]]; then
+          # Modify the sources list to prioritize amd64 packages
+          sudo sed -i 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
+        else
+          # No changes to the sources list for other architectures (e.g., arm64)
+          echo "Building for ${{ inputs.architecture }}. No changes to source list."
+        fi
       shell: bash
 
     - id: build-snap
@@ -62,8 +69,7 @@ runs:
 
         snapcraft --destructive-mode --target-arch=${{ inputs.architecture }} --enable-experimental-target-arch
 
-        # SNAP_PATH=$(find . -name "*${{ inputs.architecture }}.snap" | head -n 1)
-        SNAP_PATH=$(find . -name "*amd64.snap" | head -n 1)
+        SNAP_PATH=$(find . -name "*${{ inputs.architecture }}.snap" | head -n 1)
 
         echo "file-path=$SNAP_PATH" >> $GITHUB_OUTPUT   # Set the file path as output
 
