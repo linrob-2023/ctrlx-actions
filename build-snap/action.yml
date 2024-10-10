@@ -59,8 +59,8 @@ runs:
         cd ${{ inputs.path-app-files }}
         snapcraft clean --destructive-mode
         snapcraft --destructive-mode --target-arch=${{ inputs.architecture }} --enable-experimental-target-arch
-        echo "$(realpath $(find -name '*${{ inputs.architecture }}.snap'))"
-        echo "$(find -name '*${{ inputs.architecture }}.snap')"
+        echo "path is $(realpath $(find -name '*${{ inputs.architecture }}.snap'))"
+        echo "other path is $(find -name '*${{ inputs.architecture }}.snap')"
         echo "path-snap=$(realpath $(find -name '*${{ inputs.architecture }}.snap'))" >> $GITHUB_OUTPUT
 
         SNAP_PATH=$(find . -name "*${{ inputs.architecture }}.snap" | head -n 1)
