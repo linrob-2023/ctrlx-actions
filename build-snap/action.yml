@@ -64,7 +64,7 @@ runs:
         echo "path-snap=$(realpath $(find -name '*${{ inputs.architecture }}.snap'))" >> $GITHUB_OUTPUT
 
         echo "here is"
-        echo "$GITHUB_OUTPUT"
+        echo "path-snap"
 
         SNAP_PATH=$(find . -name "*${{ inputs.architecture }}.snap" | head -n 1)
 
