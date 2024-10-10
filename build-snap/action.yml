@@ -60,9 +60,10 @@ runs:
         snapcraft clean --destructive-mode
         echo "architecture is ${{ inputs.architecture }}"
 
-        # snapcraft --destructive-mode --target-arch=${{ inputs.architecture }} --enable-experimental-target-arch
-        snapcraft --destructive-mode --target-arch=arm64 --enable-experimental-target-arch
-        SNAP_PATH=$(find . -name "*${{ inputs.architecture }}.snap" | head -n 1)
+        snapcraft --destructive-mode --target-arch=${{ inputs.architecture }} --enable-experimental-target-arch
+
+        # SNAP_PATH=$(find . -name "*${{ inputs.architecture }}.snap" | head -n 1)
+        SNAP_PATH=$(find . -name "amd64.snap" | head -n 1)
 
         echo "file-path=$FILE_PATH" >> $GITHUB_OUTPUT   # Set the file path as output
 
