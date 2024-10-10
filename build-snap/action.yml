@@ -63,6 +63,9 @@ runs:
         echo "other path is $(find -name '*${{ inputs.architecture }}.snap')"
         echo "path-snap=$(realpath $(find -name '*${{ inputs.architecture }}.snap'))" >> $GITHUB_OUTPUT
 
+        echo "here is"
+        echo "$GITHUB_OUTPUT"
+
         SNAP_PATH=$(find . -name "*${{ inputs.architecture }}.snap" | head -n 1)
 
         # Check if the snap file exists and is valid
