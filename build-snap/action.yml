@@ -54,7 +54,7 @@ runs:
         echo "deb [arch=arm64] http://ports.ubuntu.com/ focal main restricted universe" | sudo tee -a /etc/apt/sources.list.d/multiarch-libs.list
         echo "deb [arch=arm64] http://ports.ubuntu.com/ focal-updates main restricted universe" | sudo tee -a /etc/apt/sources.list.d/multiarch-libs.list
 
-        if [[ "${{ inputs.architecture }}" == "amd64"]]; then
+        if [[ "${{ inputs.architecture }}" == "amd64" ]]; then
           # Modify the sources list to prioritize amd64 packages
           sudo sed -i 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
         else
