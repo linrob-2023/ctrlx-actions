@@ -49,6 +49,10 @@ runs:
         sudo snap install core
         sudo snap install lxd
         sudo lxd init --auto  # Automatically initialize LXD with default settings
+
+        sudo usermod -aG lxd $USER
+        newgrp lxd  # Start a new shell with the 'lxd' group added
+
         sudo snap install snapcraft --classic
 
         sudo dpkg --add-architecture arm64
