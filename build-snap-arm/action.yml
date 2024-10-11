@@ -44,7 +44,6 @@ runs:
       shell: bash
 
     - run: |
-        sudo apt update
         sudo apt install -y snapd
         sudo snap install snapcraft --classic
         sudo dpkg --add-architecture arm64
