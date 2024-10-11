@@ -45,10 +45,12 @@ runs:
 
     - run: |
         sudo apt update
-        sudo apt install -y snapd lxd
+        sudo apt install -y snapd
+        sudo snap install core
         sudo snap install lxd
         sudo lxd init --auto  # Automatically initialize LXD with default settings
         sudo snap install snapcraft --classic
+
         sudo dpkg --add-architecture arm64
         echo "deb [arch=arm64] http://ports.ubuntu.com/ focal main restricted universe" | sudo tee -a /etc/apt/sources.list.d/multiarch-libs.list
         echo "deb [arch=arm64] http://ports.ubuntu.com/ focal-updates main restricted universe" | sudo tee -a /etc/apt/sources.list.d/multiarch-libs.list
@@ -62,6 +64,7 @@ runs:
         snapcraft clean --destructive-mode
         echo "Building snap for arm64"
 
+        sudo lxd waitready  # Ensure LXD is ready
         snapcraft --use-lxd --destructive-mode --target-arch=arm64 --enable-experimental-target-arch
 
         SNAP_PATH=$(find . -name "*arm64.snap" | head -n 1)
