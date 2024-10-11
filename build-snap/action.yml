@@ -58,7 +58,7 @@ runs:
           # Modify the sources list to prioritize amd64 packages
           sudo sed -i 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
         else
-          # No changes to the sources list for other architectures (e.g., arm64)
+          # No changes to sources list for other architectures (e.g., arm64)
           echo "Building for ${{ inputs.architecture }}. No changes to source list."
         fi
       shell: bash
